@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아리반 요일별 시간표</title>
+    <style>
+        body {
+            font-family: "Malgun Gothic", "맑은 고딕", AppleSDGothicNeo, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button.active {
+            background-color: #333333;
+            color: #ffffff;
+            border-color: #333333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 2px solid #000;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 12px 8px;
+            font-size: 15px;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            font-size: 16px;
+        }
+
+        .period-cell {
+            font-weight: bold;
+            width: 70px;
+            background-color: #fafafa;
+        }
+
+        .time-cell {
+            width: 130px;
+            white-space: nowrap;
+            background-color: #fafafa;
+        }
+
+        .location {
+            font-size: 13px;
+            color: #444;
+            margin-top: 2px;
+        }
+
+        .bg-yellow { background-color: #fef5d6; }
+        .bg-blue   { background-color: #dce6f1; }
+        .bg-pink   { background-color: #f2e1ed; }
+        .bg-white  { background-color: #ffffff; }
+
+        .day-schedule {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .day-schedule.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title">- 아리반 요일별 시간표 -</div>
+
+    <!-- 요일 선택 탭 -->
+    <div class="tab-container">
+        <button id="btn-mon" class="tab-button" onclick="openDay('mon', this)">월</button>
+        <button id="btn-tue" class="tab-button" onclick="openDay('tue', this)">화</button>
+        <button id="btn-wed" class="tab-button" onclick="openDay('wed', this)">수</button>
+        <button id="btn-thu" class="tab-button" onclick="openDay('thu', this)">목</button>
+        <button id="btn-fri" class="tab-button" onclick="openDay('fri', this)">금</button>
+    </div>
+
+    <!-- 월요일 시간표 -->
+    <div id="mon" class="day-schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">구분</th>
+                    <th>월요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-cell">1교시</td>
+                    <td class="time-cell">14:10 ~ 15:00</td>
+                    <td class="bg-yellow">자치회의<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">2교시</td>
+                    <td class="time-cell">15:10 ~ 16:00</td>
+                    <td class="bg-yellow">자기개발<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">3교시</td>
+                    <td class="time-cell">16:10 ~ 17:00</td>
+                    <td class="bg-blue">놀이요가<div class="location">(체력단련2)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">4교시</td>
+                    <td class="time-cell">17:00 ~ 17:40</td>
+                    <td class="bg-white">석식 및 종례</td>
+                </tr>
+                <tr>
+                    <td class="period-cell"></td>
+                    <td class="time-cell">17:40 ~</td>
+                    <td class="bg-white">귀가차량 운행</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 화요일 시간표 -->
+    <div id="tue" class="day-schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">구분</th>
+                    <th>화요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-cell">1교시</td>
+                    <td class="time-cell">14:10 ~ 15:00</td>
+                    <td class="bg-yellow">보충학습<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">2교시</td>
+                    <td class="time-cell">15:10 ~ 16:00</td>
+                    <td class="bg-blue">아동요리<div class="location">(바리스타실)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">3교시</td>
+                    <td class="time-cell">16:10 ~ 17:00</td>
+                    <td class="bg-yellow">자기개발<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">4교시</td>
+                    <td class="time-cell">17:00 ~ 17:40</td>
+                    <td class="bg-white">석식 및 종례</td>
+                </tr>
+                <tr>
+                    <td class="period-cell"></td>
+                    <td class="time-cell">17:40 ~</td>
+                    <td class="bg-white">귀가차량 운행</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 수요일 시간표 -->
+    <div id="wed" class="day-schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">구분</th>
+                    <th>수요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-cell">1교시</td>
+                    <td class="time-cell">14:10 ~ 15:00</td>
+                    <td class="bg-yellow">동아리활동</td>
+                </tr>
+                <tr>
+                    <td class="period-cell">2교시</td>
+                    <td class="time-cell">15:10 ~ 16:00</td>
+                    <td class="bg-blue">창의미술<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">3교시</td>
+                    <td class="time-cell">16:10 ~ 17:00</td>
+                    <td class="bg-pink">수학<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">4교시</td>
+                    <td class="time-cell">17:00 ~ 17:40</td>
+                    <td class="bg-white">석식 및 종례</td>
+                </tr>
+                <tr>
+                    <td class="period-cell"></td>
+                    <td class="time-cell">17:40 ~</td>
+                    <td class="bg-white">귀가차량 운행</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 목요일 시간표 -->
+    <div id="thu" class="day-schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">구분</th>
+                    <th>목요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-cell">1교시</td>
+                    <td class="time-cell">14:10 ~ 15:00</td>
+                    <td class="bg-yellow">보충학습<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">2교시</td>
+                    <td class="time-cell">15:10 ~ 16:00</td>
+                    <td class="bg-blue">합창<div class="location">(체력단련2)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">3교시</td>
+                    <td class="time-cell">16:10 ~ 17:00</td>
+                    <td class="bg-blue">뉴스포츠<div class="location">(강당)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">4교시</td>
+                    <td class="time-cell">17:00 ~ 17:40</td>
+                    <td class="bg-white">석식 및 종례</td>
+                </tr>
+                <tr>
+                    <td class="period-cell"></td>
+                    <td class="time-cell">17:40 ~</td>
+                    <td class="bg-white">귀가차량 운행</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 금요일 시간표 -->
+    <div id="fri" class="day-schedule">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">구분</th>
+                    <th>금요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period-cell">1교시</td>
+                    <td class="time-cell">14:10 ~ 15:00</td>
+                    <td class="bg-yellow">독서활동<div class="location">(북카페)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">2교시</td>
+                    <td class="time-cell">15:10 ~ 16:00</td>
+                    <td class="bg-pink">영어회화<div class="location">(아리)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">3교시</td>
+                    <td class="time-cell">16:10 ~ 17:00</td>
+                    <td class="bg-blue">미디어<div class="location">(IT교육실)</div></td>
+                </tr>
+                <tr>
+                    <td class="period-cell">4교시</td>
+                    <td class="time-cell">17:00 ~ 17:40</td>
+                    <td class="bg-white">석식 및 종례</td>
+                </tr>
+                <tr>
+                    <td class="period-cell"></td>
+                    <td class="time-cell">17:40 ~</td>
+                    <td class="bg-white">귀가차량 운행</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 탭 전환 함수
+        function openDay(dayId, btnElement) {
+            const schedules = document.querySelectorAll('.day-schedule');
+            schedules.forEach(schedule => schedule.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(dayId).classList.add('active');
+            if (btnElement) {
+                btnElement.classList.add('active');
+            }
+        }
+
+        // 페이지 로드시 오늘 요일 자동 선택
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().getDay(); // 0: 일, 1: 월, 2: 화, 3: 수, 4: 목, 5: 금, 6: 토
+            
+            // 요일 코드 매핑
+            const dayMap = {
+                1: { id: 'mon', btn: 'btn-mon' },
+                2: { id: 'tue', btn: 'btn-tue' },
+                3: { id: 'wed', btn: 'btn-wed' },
+                4: { id: 'thu', btn: 'btn-thu' },
+                5: { id: 'fri', btn: 'btn-fri' }
+            };
+
+            // 주말(토, 일)일 경우 기본적으로 월요일을 보여줌
+            const target = dayMap[today] || dayMap[1];
+
+            openDay(target.id, document.getElementById(target.btn));
+        });
+    </script>
+
+</body>
+</html>
