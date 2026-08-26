@@ -1,349 +1,706 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아리반 요일별 시간표</title>
-    <style>
-        body {
-            font-family: "Malgun Gothic", "맑은 고딕", AppleSDGothicNeo, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: #ffffff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>초등학교 시간표</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #000;
-        }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(160deg, #f0e8ff 0%, #fef9f0 40%, #e8f4ff 100%);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+    }
 
-        .tab-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 400px;
-        }
+    .app {
+      width: 100%;
+      max-width: 430px;
+      padding-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .tab-button {
-            flex: 1;
-            padding: 10px 0;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    /* ── Header ── */
+    .header {
+      padding: 2rem 1.25rem 1rem;
+    }
 
-        .tab-button.active {
-            background-color: #333333;
-            color: #ffffff;
-            border-color: #333333;
-        }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            border: 2px solid #000;
-        }
+    .class-label {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #7c5cbf;
+      letter-spacing: 0.05em;
+    }
 
-        th, td {
-            border: 1px solid #000;
-            padding: 12px 8px;
-            font-size: 15px;
-            line-height: 1.4;
-            vertical-align: middle;
-        }
+    .day-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      background: #ede9fe;
+      color: #6d28d9;
+    }
 
-        th {
-            background-color: #f8f8f8;
-            font-size: 16px;
-        }
+    /* ── Clock Card ── */
+    .clock-card {
+      background: linear-gradient(135deg, #7c5cbf 0%, #a78bfa 100%);
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(124, 92, 191, 0.35);
+    }
 
-        .period-cell {
-            font-weight: bold;
-            width: 70px;
-            background-color: #fafafa;
-        }
+    .clock-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
 
-        .time-cell {
-            width: 130px;
-            white-space: nowrap;
-            background-color: #fafafa;
-        }
+    .clock-ampm {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.75rem;
+    }
 
-        .location {
-            font-size: 13px;
-            color: #444;
-            margin-top: 2px;
-        }
+    .clock-time {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(4rem, 18vw, 6.5rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
 
-        .bg-yellow { background-color: #fef5d6; }
-        .bg-blue   { background-color: #dce6f1; }
-        .bg-pink   { background-color: #f2e1ed; }
-        .bg-white  { background-color: #ffffff; }
+    .clock-sec {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      align-self: flex-end;
+      margin-bottom: 0.5rem;
+    }
 
-        .day-schedule {
-            display: none;
-            width: 100%;
-            max-width: 400px;
-        }
+    .clock-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
 
-        .day-schedule.active {
-            display: block;
-        }
-    </style>
+    .pulse-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 9999px;
+      background: #86efac;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .clock-deco1, .clock-deco2 {
+      position: absolute;
+      border-radius: 9999px;
+      background: #fff;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+    .clock-deco1 { width: 7rem; height: 7rem; top: -1.5rem; right: -1.5rem; }
+    .clock-deco2 { width: 4rem; height: 4rem; bottom: 0.5rem; right: -0.5rem; }
+
+    /* ── Day Selector ── */
+    .day-selector {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .day-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.625rem 0;
+      border-radius: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .day-btn.active {
+      background: #7c5cbf;
+      box-shadow: 0 4px 16px rgba(124, 92, 191, 0.35);
+      transform: scale(1.06);
+      color: #fff;
+    }
+
+    .day-btn.inactive {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      color: #7c6f99;
+    }
+
+    .today-dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: 9999px;
+      margin-top: 0.125rem;
+    }
+
+    /* ── Period List ── */
+    .period-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 0 1.25rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.25rem 0;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(124, 92, 191, 0.15);
+    }
+
+    .divider-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      background: #fff9e6;
+      color: #a16207;
+      border: 1.5px dashed #fcd34d;
+      white-space: nowrap;
+    }
+
+    /* ── Period Card ── */
+    .period-card {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .period-card.current {
+      transform: scale(1.02);
+    }
+
+    .period-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .period-num {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .period-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .subject-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .subject-emoji {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .subject-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .next-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      flex-shrink: 0;
+      background: #fde68a;
+      color: #a16207;
+    }
+
+    .period-time {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 0.125rem;
+    }
+
+    .room-box {
+      flex-shrink: 0;
+      padding: 0.5rem 0.75rem;
+      border-radius: 1rem;
+      text-align: center;
+    }
+
+    .room-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .room-value {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    /* ── Progress Bar ── */
+    .progress-wrap {
+      padding: 0 1rem 1rem;
+    }
+
+    .progress-track {
+      height: 0.75rem;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 1s linear;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.25rem;
+    }
+
+    .progress-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* ── End Divider ── */
+    .end-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .end-divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(124, 92, 191, 0.12);
+    }
+
+    .end-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #7c6f99;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="title">- 아리반 요일별 시간표 -</div>
-
-    <!-- 요일 선택 탭 -->
-    <div class="tab-container">
-        <button id="btn-mon" class="tab-button" onclick="openDay('mon', this)">월</button>
-        <button id="btn-tue" class="tab-button" onclick="openDay('tue', this)">화</button>
-        <button id="btn-wed" class="tab-button" onclick="openDay('wed', this)">수</button>
-        <button id="btn-thu" class="tab-button" onclick="openDay('thu', this)">목</button>
-        <button id="btn-fri" class="tab-button" onclick="openDay('fri', this)">금</button>
+<div class="app">
+  <div class="header">
+    <div class="header-top">
+      <span class="class-label">3학년 2반 🏫</span>
+      <span class="day-badge" id="day-badge">월요일</span>
     </div>
 
-    <!-- 월요일 시간표 -->
-    <div id="mon" class="day-schedule">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">구분</th>
-                    <th>월요일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="period-cell">1교시</td>
-                    <td class="time-cell">14:10 ~ 15:00</td>
-                    <td class="bg-yellow">자치회의<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">2교시</td>
-                    <td class="time-cell">15:10 ~ 16:00</td>
-                    <td class="bg-yellow">자기개발<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">3교시</td>
-                    <td class="time-cell">16:10 ~ 17:00</td>
-                    <td class="bg-blue">놀이요가<div class="location">(체력단련2)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">4교시</td>
-                    <td class="time-cell">17:00 ~ 17:40</td>
-                    <td class="bg-white">석식 및 종례</td>
-                </tr>
-                <tr>
-                    <td class="period-cell"></td>
-                    <td class="time-cell">17:40 ~</td>
-                    <td class="bg-white">귀가차량 운행</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="clock-card">
+      <div class="clock-row">
+        <span class="clock-ampm" id="ampm">오전</span>
+        <span class="clock-time" id="clock-time">9:00</span>
+        <span class="clock-sec" id="clock-sec">00</span>
+      </div>
+      <div id="clock-status"></div>
+      <div class="clock-deco1"></div>
+      <div class="clock-deco2"></div>
     </div>
+  </div>
 
-    <!-- 화요일 시간표 -->
-    <div id="tue" class="day-schedule">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">구분</th>
-                    <th>화요일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="period-cell">1교시</td>
-                    <td class="time-cell">14:10 ~ 15:00</td>
-                    <td class="bg-yellow">보충학습<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">2교시</td>
-                    <td class="time-cell">15:10 ~ 16:00</td>
-                    <td class="bg-blue">아동요리<div class="location">(바리스타실)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">3교시</td>
-                    <td class="time-cell">16:10 ~ 17:00</td>
-                    <td class="bg-yellow">자기개발<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">4교시</td>
-                    <td class="time-cell">17:00 ~ 17:40</td>
-                    <td class="bg-white">석식 및 종례</td>
-                </tr>
-                <tr>
-                    <td class="period-cell"></td>
-                    <td class="time-cell">17:40 ~</td>
-                    <td class="bg-white">귀가차량 운행</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <div class="day-selector" id="day-selector"></div>
+  <div class="period-list" id="period-list"></div>
+</div>
 
-    <!-- 수요일 시간표 -->
-    <div id="wed" class="day-schedule">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">구분</th>
-                    <th>수요일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="period-cell">1교시</td>
-                    <td class="time-cell">14:10 ~ 15:00</td>
-                    <td class="bg-yellow">동아리활동</td>
-                </tr>
-                <tr>
-                    <td class="period-cell">2교시</td>
-                    <td class="time-cell">15:10 ~ 16:00</td>
-                    <td class="bg-blue">창의미술<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">3교시</td>
-                    <td class="time-cell">16:10 ~ 17:00</td>
-                    <td class="bg-pink">수학<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">4교시</td>
-                    <td class="time-cell">17:00 ~ 17:40</td>
-                    <td class="bg-white">석식 및 종례</td>
-                </tr>
-                <tr>
-                    <td class="period-cell"></td>
-                    <td class="time-cell">17:40 ~</td>
-                    <td class="bg-white">귀가차량 운행</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<script>
+const DAYS = ["월", "화", "수", "목", "금"];
+const DAY_NAMES = ["월요일", "화요일", "수요일", "목요일", "금요일"];
 
-    <!-- 목요일 시간표 -->
-    <div id="thu" class="day-schedule">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">구분</th>
-                    <th>목요일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="period-cell">1교시</td>
-                    <td class="time-cell">14:10 ~ 15:00</td>
-                    <td class="bg-yellow">보충학습<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">2교시</td>
-                    <td class="time-cell">15:10 ~ 16:00</td>
-                    <td class="bg-blue">합창<div class="location">(체력단련2)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">3교시</td>
-                    <td class="time-cell">16:10 ~ 17:00</td>
-                    <td class="bg-blue">뉴스포츠<div class="location">(강당)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">4교시</td>
-                    <td class="time-cell">17:00 ~ 17:40</td>
-                    <td class="bg-white">석식 및 종례</td>
-                </tr>
-                <tr>
-                    <td class="period-cell"></td>
-                    <td class="time-cell">17:40 ~</td>
-                    <td class="bg-white">귀가차량 운행</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+const SUBJECT_STYLES = {
+  "국어":  { emoji:"📖", color:"#fde8f5", textColor:"#b5268a", border:"#f9b8e4" },
+  "수학":  { emoji:"🔢", color:"#dbeafe", textColor:"#1d4ed8", border:"#93c5fd" },
+  "영어":  { emoji:"🌍", color:"#ede9fe", textColor:"#6d28d9", border:"#c4b5fd" },
+  "과학":  { emoji:"🔬", color:"#d1fae5", textColor:"#047857", border:"#6ee7b7" },
+  "사회":  { emoji:"🗺️", color:"#fff7d6", textColor:"#a16207", border:"#fde68a" },
+  "도덕":  { emoji:"💛", color:"#fef3c7", textColor:"#92400e", border:"#fcd34d" },
+  "체육":  { emoji:"⚽", color:"#fee2e2", textColor:"#b91c1c", border:"#fca5a5" },
+  "미술":  { emoji:"🎨", color:"#ffedd5", textColor:"#c2410c", border:"#fdba74" },
+  "음악":  { emoji:"🎵", color:"#e0f2fe", textColor:"#0369a1", border:"#7dd3fc" },
+  "실과":  { emoji:"🌱", color:"#dcfce7", textColor:"#15803d", border:"#86efac" },
+  "창체":  { emoji:"⭐", color:"#f5f3ff", textColor:"#7c3aed", border:"#ddd6fe" },
+};
 
-    <!-- 금요일 시간표 -->
-    <div id="fri" class="day-schedule">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">구분</th>
-                    <th>금요일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="period-cell">1교시</td>
-                    <td class="time-cell">14:10 ~ 15:00</td>
-                    <td class="bg-yellow">독서활동<div class="location">(북카페)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">2교시</td>
-                    <td class="time-cell">15:10 ~ 16:00</td>
-                    <td class="bg-pink">영어회화<div class="location">(아리)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">3교시</td>
-                    <td class="time-cell">16:10 ~ 17:00</td>
-                    <td class="bg-blue">미디어<div class="location">(IT교육실)</div></td>
-                </tr>
-                <tr>
-                    <td class="period-cell">4교시</td>
-                    <td class="time-cell">17:00 ~ 17:40</td>
-                    <td class="bg-white">석식 및 종례</td>
-                </tr>
-                <tr>
-                    <td class="period-cell"></td>
-                    <td class="time-cell">17:40 ~</td>
-                    <td class="bg-white">귀가차량 운행</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+function getStyle(name) {
+  return SUBJECT_STYLES[name] ?? { emoji:"📚", color:"#f1f5f9", textColor:"#475569", border:"#cbd5e1" };
+}
 
-    <script>
-        // 탭 전환 함수
-        function openDay(dayId, btnElement) {
-            const schedules = document.querySelectorAll('.day-schedule');
-            schedules.forEach(schedule => schedule.classList.remove('active'));
+const TIMETABLE = [
+  [ // 월
+    { period:1, start:"09:00", end:"09:40", subject:"국어", room:"4-6반" },
+    { period:2, start:"09:50", end:"10:30", subject:"수학", room:"4-6반" },
+    { period:3, start:"10:40", end:"11:20", subject:"영어", room:"4-6반" },
+    { period:4, start:"11:30", end:"12:10", subject:"과학", room:"4-6반" },
+    { period:5, start:"13:10", end:"13:50", subject:"체육", room:"4-6반" },
+    { period:6, start:"14:00", end:"14:40", subject:"음악", room:"4-6반" },
+    { period:6, start:"15:00", end:"15:40", subject:"셀파", room:"셀파" },
+    { period:6, start:"16:00", end:"16:40", subject:"영어", room:"영어" },
+    { period:6, start:"17:00", end:"17:40", subject:"피아노", room:"피아노" },
+    { period:6, start:"18:30", end:"20:00", subject:"수영", room:"슈퍼스타" },
+  ],
+  [ // 화
+    { period:1, start:"09:00", end:"09:40", subject:"수학", room:"4-6반" },
+    { period:2, start:"09:50", end:"10:30", subject:"국어", room:"4-6반" },
+    { period:3, start:"10:40", end:"11:20", subject:"사회", room:"4-6반" },
+    { period:4, start:"11:30", end:"12:10", subject:"미술", room:"4-6반" },
+    { period:5, start:"13:10", end:"13:50", subject:"영어", room:"4-6반" },
+    { period:6, start:"14:00", end:"14:40", subject:"창체", room:"4-6반" },
+  ],
+  [ // 수
+    { period:1, start:"09:00", end:"09:40", subject:"영어", room:"4-6반" },
+    { period:2, start:"09:50", end:"10:30", subject:"도덕", room:"4-6반" },
+    { period:3, start:"10:40", end:"11:20", subject:"수학", room:"4-6반" },
+    { period:4, start:"11:30", end:"12:10", subject:"국어", room:"4-6반" },
+    { period:5, start:"13:10", end:"13:50", subject:"과학", room:"4-6반" },
+  ],
+  [ // 목
+    { period:1, start:"09:00", end:"09:40", subject:"사회", room:"4-6반" },
+    { period:2, start:"09:50", end:"10:30", subject:"수학", room:"4-6반" },
+    { period:3, start:"10:40", end:"11:20", subject:"국어", room:"4-6반" },
+    { period:4, start:"11:30", end:"12:10", subject:"실과", room:"4-6반" },
+    { period:5, start:"13:10", end:"13:50", subject:"체육", room:"4-6반" },
+    { period:6, start:"14:00", end:"14:40", subject:"음악", room:"4-6반" },
+  ],
+  [ // 금
+    { period:1, start:"09:00", end:"09:40", subject:"국어", room:"4-6반" },
+    { period:2, start:"09:50", end:"10:30", subject:"영어", room:"4-6반" },
+    { period:3, start:"10:40", end:"11:20", subject:"수학", room:"4-6반" },
+    { period:4, start:"11:30", end:"12:10", subject:"사회", room:"4-6반" },
+    { period:5, start:"13:10", end:"13:50", subject:"미술", room:"4-6반" },
+    { period:6, start:"14:00", end:"14:40", subject:"창체", room:"4-6반" },
+  ],
+];
 
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(button => button.classList.remove('active'));
+function parseTime(t) {
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
 
-            document.getElementById(dayId).classList.add('active');
-            if (btnElement) {
-                btnElement.classList.add('active');
-            }
-        }
+function pad(n) {
+  return String(n).padStart(2, "0");
+}
 
-        // 페이지 로드시 오늘 요일 자동 선택
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().getDay(); // 0: 일, 1: 월, 2: 화, 3: 수, 4: 목, 5: 금, 6: 토
-            
-            // 요일 코드 매핑
-            const dayMap = {
-                1: { id: 'mon', btn: 'btn-mon' },
-                2: { id: 'tue', btn: 'btn-tue' },
-                3: { id: 'wed', btn: 'btn-wed' },
-                4: { id: 'thu', btn: 'btn-thu' },
-                5: { id: 'fri', btn: 'btn-fri' }
-            };
+function getNowMinutes(d) {
+  return d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+}
 
-            // 주말(토, 일)일 경우 기본적으로 월요일을 보여줌
-            const target = dayMap[today] || dayMap[1];
+function getCurrentPeriod(periods, now) {
+  const mins = getNowMinutes(now);
+  for (const p of periods) {
+    if (mins >= parseTime(p.start) && mins < parseTime(p.end)) return p.period;
+  }
+  return -1;
+}
 
-            openDay(target.id, document.getElementById(target.btn));
-        });
-    </script>
+function getNextPeriod(periods, now) {
+  const mins = getNowMinutes(now);
+  for (const p of periods) {
+    if (mins < parseTime(p.start)) return p.period;
+  }
+  return -1;
+}
 
+// State
+let selectedDay = (() => {
+  const d = new Date().getDay();
+  return (d >= 1 && d <= 5) ? d - 1 : 0;
+})();
+
+// Build day selector
+const daySelector = document.getElementById("day-selector");
+DAYS.forEach((d, i) => {
+  const btn = document.createElement("button");
+  btn.className = "day-btn " + (i === selectedDay ? "active" : "inactive");
+  btn.dataset.index = i;
+
+  const label = document.createElement("span");
+  label.textContent = d;
+  btn.appendChild(label);
+
+  const todayDot = document.createElement("span");
+  todayDot.className = "today-dot";
+  todayDot.dataset.dayIndex = i;
+  btn.appendChild(todayDot);
+
+  btn.addEventListener("click", () => {
+    selectedDay = i;
+    updateDayButtons();
+    renderPeriods();
+  });
+
+  daySelector.appendChild(btn);
+});
+
+function updateDayButtons() {
+  const now = new Date();
+  const todayIdx = now.getDay() - 1;
+  daySelector.querySelectorAll(".day-btn").forEach((btn, i) => {
+    btn.className = "day-btn " + (i === selectedDay ? "active" : "inactive");
+    const dot = btn.querySelector(".today-dot");
+    if (i === todayIdx) {
+      dot.style.background = i === selectedDay ? "#fde68a" : "#7c5cbf";
+      dot.style.display = "block";
+    } else {
+      dot.style.display = "none";
+    }
+  });
+  document.getElementById("day-badge").textContent = DAY_NAMES[selectedDay];
+}
+
+// Render period list
+function renderPeriods() {
+  const now = new Date();
+  const isToday = now.getDay() - 1 === selectedDay;
+  const periods = TIMETABLE[selectedDay];
+  const currentPeriod = isToday ? getCurrentPeriod(periods, now) : -1;
+  const nextPeriod = isToday ? getNextPeriod(periods, now) : -1;
+  const nowMins = getNowMinutes(now);
+
+  const list = document.getElementById("period-list");
+  list.innerHTML = "";
+
+  periods.forEach((p, idx) => {
+    // Lunch divider after 4th period
+    if (idx === 4) {
+      const div = document.createElement("div");
+      div.className = "divider";
+      div.innerHTML = `
+        <div class="divider-line"></div>
+        <span class="divider-label">🍱 점심시간 12:10 ~ 13:10</span>
+        <div class="divider-line"></div>
+      `;
+      list.appendChild(div);
+    }
+
+    const style = getStyle(p.subject);
+    const isCurrent = currentPeriod === p.period;
+    const isNext = nextPeriod === p.period && currentPeriod === -1;
+
+    const card = document.createElement("div");
+    card.className = "period-card" + (isCurrent ? " current" : "");
+    card.style.background = isCurrent ? style.color : "#ffffff";
+    card.style.border = isCurrent
+      ? `2.5px solid ${style.border}`
+      : "2px solid rgba(124,92,191,0.08)";
+    card.style.boxShadow = isCurrent
+      ? `0 6px 24px ${style.border}66`
+      : "0 2px 10px rgba(0,0,0,0.05)";
+
+    // Badges
+    let badgeHtml = "";
+    if (isCurrent) {
+      badgeHtml = `<span class="status-badge" style="background:${style.textColor}">수업중</span>`;
+    } else if (isNext) {
+      badgeHtml = `<span class="next-badge">다음</span>`;
+    }
+
+    card.innerHTML = `
+      <div class="period-inner">
+        <div class="period-num" style="background:${isCurrent ? style.textColor : style.color}; color:${isCurrent ? "#fff" : style.textColor}">
+          ${p.period}
+        </div>
+        <div class="period-info">
+          <div class="subject-row">
+            <span class="subject-emoji">${style.emoji}</span>
+            <span class="subject-name" style="color:${isCurrent ? style.textColor : "#2d2640"}">${p.subject}</span>
+            ${badgeHtml}
+          </div>
+          <div class="period-time" style="color:${isCurrent ? style.textColor : "#7c6f99"}">
+            ${p.start} – ${p.end}
+          </div>
+        </div>
+        <div class="room-box" style="background:${isCurrent ? style.textColor + "18" : style.color}">
+          <span class="room-label" style="color:${style.textColor}">장소</span>
+          <span class="room-value" style="color:${style.textColor}">${p.room}</span>
+        </div>
+      </div>
+    `;
+
+    // Progress bar for current period
+    if (isCurrent) {
+      const start = parseTime(p.start);
+      const end = parseTime(p.end);
+      const pct = Math.min(100, Math.max(0, ((nowMins - start) / (end - start)) * 100));
+      const remaining = Math.ceil(end - nowMins);
+
+      const progressWrap = document.createElement("div");
+      progressWrap.className = "progress-wrap";
+      progressWrap.dataset.periodIndex = idx;
+      progressWrap.innerHTML = `
+        <div class="progress-track" style="background:${style.border}55">
+          <div class="progress-fill" id="progress-fill-${p.period}" style="width:${pct}%; background:${style.textColor}"></div>
+        </div>
+        <div class="progress-labels">
+          <span class="progress-text" id="progress-pct-${p.period}" style="color:${style.textColor}">${Math.round(pct)}% 진행</span>
+          <span class="progress-text" id="progress-rem-${p.period}" style="color:${style.textColor}">⏱ ${remaining}분 남음</span>
+        </div>
+      `;
+      card.appendChild(progressWrap);
+    }
+
+    list.appendChild(card);
+  });
+
+  // End of day divider
+  const endDiv = document.createElement("div");
+  endDiv.className = "end-divider";
+  endDiv.innerHTML = `
+    <div class="end-divider-line"></div>
+    <span class="end-label">하교 🎒</span>
+    <div class="end-divider-line"></div>
+  `;
+  list.appendChild(endDiv);
+}
+
+// Update clock every second
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+  const ampm = h < 12 ? "오전" : "오후";
+  const displayH = h % 12 === 0 ? 12 : h % 12;
+
+  document.getElementById("ampm").textContent = ampm;
+  document.getElementById("clock-time").textContent = `${pad(displayH)}:${pad(m)}`;
+  document.getElementById("clock-sec").textContent = pad(s);
+
+  // Status message
+  const isToday = now.getDay() - 1 === selectedDay;
+  const periods = TIMETABLE[selectedDay];
+  const currentPeriod = isToday ? getCurrentPeriod(periods, now) : -1;
+  const nextPeriod = isToday ? getNextPeriod(periods, now) : -1;
+  const statusEl = document.getElementById("clock-status");
+
+  if (currentPeriod !== -1) {
+    statusEl.innerHTML = `
+      <div class="clock-status">
+        <span class="pulse-dot"></span>
+        지금 ${currentPeriod}교시 수업 중!
+      </div>`;
+  } else if (nextPeriod !== -1 && isToday) {
+    statusEl.innerHTML = `
+      <div class="clock-status">
+        ⏰ 다음 ${nextPeriod}교시 준비하세요!
+      </div>`;
+  } else {
+    statusEl.innerHTML = "";
+  }
+
+  // Update progress bar if visible
+  const nowMins = getNowMinutes(now);
+  if (currentPeriod !== -1) {
+    const p = periods.find(x => x.period === currentPeriod);
+    if (p) {
+      const start = parseTime(p.start);
+      const end = parseTime(p.end);
+      const pct = Math.min(100, Math.max(0, ((nowMins - start) / (end - start)) * 100));
+      const remaining = Math.ceil(end - nowMins);
+      const fillEl = document.getElementById(`progress-fill-${p.period}`);
+      const pctEl = document.getElementById(`progress-pct-${p.period}`);
+      const remEl = document.getElementById(`progress-rem-${p.period}`);
+      if (fillEl) fillEl.style.width = pct + "%";
+      if (pctEl) pctEl.textContent = Math.round(pct) + "% 진행";
+      if (remEl) remEl.textContent = "⏱ " + remaining + "분 남음";
+    }
+  }
+}
+
+// Re-render every minute to update current/next period highlighting
+let lastMinute = -1;
+function tick() {
+  const now = new Date();
+  updateClock();
+  if (now.getMinutes() !== lastMinute) {
+    lastMinute = now.getMinutes();
+    updateDayButtons();
+    renderPeriods();
+  }
+  requestAnimationFrame(tick);
+}
+
+// Init
+updateDayButtons();
+renderPeriods();
+requestAnimationFrame(tick);
+</script>
 </body>
 </html>
