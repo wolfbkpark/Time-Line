@@ -563,6 +563,16 @@ function renderPeriods() {
       `;
       list.appendChild(div);
     }
+    if (idx === 6) {
+      const div = document.createElement("div");
+      div.className = "divider";
+      div.innerHTML = `
+        <div class="end-divider-line"></div>
+        <span class="end-label">하교 🎒</span>
+        <div class="end-divider-line"></div>
+      `;
+      list.appendChild(div);
+    }
 
     const style = getStyle(p.subject);
     const isCurrent = currentPeriod === p.period;
@@ -638,7 +648,7 @@ function renderPeriods() {
   endDiv.className = "end-divider";
   endDiv.innerHTML = `
     <div class="end-divider-line"></div>
-    <span class="end-label">하교 🎒</span>
+    <span class="end-label">일정 끝!</span>
     <div class="end-divider-line"></div>
   `;
   list.appendChild(endDiv);
