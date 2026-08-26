@@ -3,9 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>반갑습니다</title>
+    <title>아리반 시간표</title>
+    <style>
+        body {
+            font-family: "Malgun Gothic", "맑은 고딕", AppleSDGothicNeo, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+            border: 2px solid #000;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 10px 6px;
+            font-size: 14px;
+            line-height: 1.4;
+            vertical-align: middle;
+        }
+
+        /* 구분 및 시간 헤더 영역 */
+        th {
+            font-weight: normal;
+            font-size: 16px;
+            background-color: #ffffff;
+        }
+
+        .period-cell {
+            font-weight: bold;
+            width: 70px;
+        }
+
+        .time-cell {
+            width: 140px;
+            white-space: nowrap;
+        }
+
+        /* 과목명 강조 */
+        .subject {
+            font-weight: normal;
+            color: #000;
+        }
+
+        /* 장소 표시 */
+        .location {
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* 셀 배경색 (이미지 색상 반영) */
+        .bg-yellow {
+            background-color: #fef5d6; /* 연한 노랑/베이지 */
+        }
+
+        .bg-blue {
+            background-color: #dce6f1; /* 연한 파랑 */
+        }
+
+        .bg-pink {
+            background-color: #f2e1ed; /* 연한 분홍/보라 */
+        }
+
+        .bg-white {
+            background-color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-    어서와 친구들
+
+    <div class="title">- 아리반 -</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">구분</th>
+                <th style="width: 15%;">월</th>
+                <th style="width: 15%;">화</th>
+                <th style="width: 15%;">수</th>
+                <th style="width: 15%;">목</th>
+                <th style="width: 15%;">금</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 1교시 -->
+            <tr>
+                <td class="period-cell">1교시</td>
+                <td class="time-cell">14:10 ~ 15:00</td>
+                <td class="bg-yellow">
+                    <div class="subject">자치회의</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-yellow">
+                    <div class="subject">보충학습</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-yellow">
+                    <div class="subject">동아리활동</div>
+                </td>
+                <td class="bg-yellow">
+                    <div class="subject">보충학습</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-yellow">
+                    <div class="subject">독서활동</div>
+                    <div class="location">(북카페)</div>
+                </td>
+            </tr>
+
+            <!-- 2교시 -->
+            <tr>
+                <td class="period-cell">2교시</td>
+                <td class="time-cell">15:10 ~ 16:00</td>
+                <td class="bg-yellow">
+                    <div class="subject">자기개발</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-blue">
+                    <div class="subject">아동요리</div>
+                    <div class="location">(바리스타실)</div>
+                </td>
+                <td class="bg-blue">
+                    <div class="subject">창의미술</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-blue">
+                    <div class="subject">합창</div>
+                    <div class="location">(체력단련2)</div>
+                </td>
+                <td class="bg-pink">
+                    <div class="subject">영어회화</div>
+                    <div class="location">(아리)</div>
+                </td>
+            </tr>
+
+            <!-- 3교시 -->
+            <tr>
+                <td class="period-cell">3교시</td>
+                <td class="time-cell">16:10 ~ 17:00</td>
+                <td class="bg-blue">
+                    <div class="subject">놀이요가</div>
+                    <div class="location">(체력단련2)</div>
+                </td>
+                <td class="bg-yellow">
+                    <div class="subject">자기개발</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-pink">
+                    <div class="subject">수학</div>
+                    <div class="location">(아리)</div>
+                </td>
+                <td class="bg-blue">
+                    <div class="subject">뉴스포츠</div>
+                    <div class="location">(강당)</div>
+                </td>
+                <td class="bg-blue">
+                    <div class="subject">미디어</div>
+                    <div class="location">(IT교육실)</div>
+                </td>
+            </tr>
+
+            <!-- 4교시 -->
+            <tr>
+                <td class="period-cell">4교시</td>
+                <td class="time-cell">17:00 ~ 17:40</td>
+                <td colspan="5" class="bg-white">
+                    석식 및 종례
+                </td>
+            </tr>
+
+            <!-- 하교 시간 -->
+            <tr>
+                <td class="period-cell"></td>
+                <td class="time-cell">17:40 ~</td>
+                <td colspan="5" class="bg-white">
+                    귀가차량 운행
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
 </html>
