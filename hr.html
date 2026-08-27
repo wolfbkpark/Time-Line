@@ -468,6 +468,13 @@ function pad(n) {
   return String(n).padStart(2, "0");
 }
 
+function formatTime12(t) {
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h < 12 ? "오전" : "오후";
+  const hour = h % 12 === 0 ? 12 : h % 12;
+  return `${ampm} ${hour}:${pad(m)}`;
+}
+
 function getNowMinutes(d) {
   return d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
 }
@@ -605,7 +612,7 @@ function renderPeriods() {
             ${badgeHtml}
           </div>
           <div class="period-time" style="color:${isCurrent ? style.textColor : "#7c6f99"}">
-            ${p.start} – ${p.end}
+            ${formatTime12(p.start)} – ${formatTime12(p.end)}
           </div>
         </div>
         <div class="room-box" style="background:${isCurrent ? style.textColor + "18" : style.color}">
