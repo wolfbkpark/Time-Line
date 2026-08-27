@@ -411,8 +411,8 @@ const TIMETABLE = [
     { period:1, start:"09:00", end:"09:40", subject:"창체", room:"2-4반" },
     { period:2, start:"09:50", end:"10:30", subject:"국어", room:"2-4반" },
     { period:3, start:"10:40", end:"11:20", subject:"수학", room:"2-4반" },
-    { period:4, start:"11:30", end:"12:10", subject:"계절", room:"2-4반" },
-    { period:5, start:"13:10", end:"13:50", subject:"계절", room:"2-4반" },
+    { period:4, start:"12:10", end:"12:50", subject:"계절", room:"2-4반" },
+    { period:5, start:"13:00", end:"13:40", subject:"계절", room:"2-4반" },
     { period:"학원", start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
     { period:"학원", start:"15:00", end:"16:00", subject:"책나무", room:"책나무" },
     { period:"학원", start:"18:30", end:"20:00", subject:"수영", room:"슈퍼스타" },
@@ -421,37 +421,37 @@ const TIMETABLE = [
     { period:1, start:"09:00", end:"09:40", subject:"계절", room:"2-4반" },
     { period:2, start:"09:50", end:"10:30", subject:"국어", room:"2-4반" },
     { period:3, start:"10:40", end:"11:20", subject:"국어", room:"2-4반" },
-    { period:4, start:"11:30", end:"12:10", subject:"계절", room:"2-4반" },
-    { period:5, start:"13:10", end:"13:50", subject:"계절", room:"2-4반" },
-    { period:6, start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
-    { period:7, start:"15:30", end:"18:30", subject:"영어", room:"집(마리아샘)" },
+    { period:4, start:"12:10", end:"12:50", subject:"계절", room:"2-4반" },
+    { period:5, start:"13:00", end:"13:40", subject:"계절", room:"2-4반" },
+    { period:"학원", start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
+    { period:"학원", start:"15:30", end:"18:30", subject:"영어", room:"집(마리아샘)" },
   ],
   [ // 수
     { period:1, start:"09:00", end:"09:40", subject:"국어", room:"2-4반" },
     { period:2, start:"09:50", end:"10:30", subject:"수학", room:"2-4반" },
     { period:3, start:"10:40", end:"11:20", subject:"계절", room:"2-4반" },
-    { period:4, start:"11:30", end:"12:10", subject:"계절", room:"2-4반" },
-    { period:5, start:"13:00", end:"14:00", subject:"컴퓨터", room:"반" },
-    { period:6, start:"15:00", end:"16:00", subject:"생명과학", room:"반" },
-    { period:7, start:"16:00", end:"17:00", subject:"셀파", room:"셀파" },
+    { period:4, start:"12:10", end:"12:50", subject:"계절", room:"2-4반" },
+    { period:"학교", start:"13:00", end:"14:00", subject:"컴퓨터", room:"반" },
+    { period:"학교", start:"15:00", end:"16:00", subject:"생명과학", room:"반" },
+    { period:"학원", start:"16:00", end:"17:00", subject:"셀파", room:"셀파" },
   ],
   [ // 목
     { period:1, start:"09:00", end:"09:40", subject:"국어", room:"2-4반" },
     { period:2, start:"09:50", end:"10:30", subject:"국어", room:"2-4반" },
     { period:3, start:"10:40", end:"11:20", subject:"수학", room:"2-4반" },
-    { period:4, start:"11:30", end:"12:10", subject:"창체", room:"2-4반" },
-    { period:5, start:"13:10", end:"13:50", subject:"계절", room:"2-4반" },
-    { period:6, start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
-    { period:7, start:"17:30", end:"18:30", subject:"영어", room:"집(마리아샘)" },
+    { period:4, start:"12:10", end:"12:50", subject:"창체", room:"2-4반" },
+    { period:5, start:"13:00", end:"13:40", subject:"계절", room:"2-4반" },
+    { period:"학원", start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
+    { period:"학원", start:"17:30", end:"18:30", subject:"영어", room:"집(마리아샘)" },
   ],
   [ // 금
     { period:1, start:"09:00", end:"09:40", subject:"수학", room:"2-4반" },
     { period:2, start:"09:50", end:"10:30", subject:"창체", room:"2-4반" },
     { period:3, start:"10:40", end:"11:20", subject:"계절", room:"2-4반" },
-    { period:4, start:"11:30", end:"12:10", subject:"계절", room:"2-4반" },
-    { period:5, start:"13:00", end:"14:00", subject:"컴퓨터", room:"반" },
-    { period:6, start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
-    { period:7, start:"15:00", end:"16:00", subject:"책나무", room:"책나무" },
+    { period:4, start:"12:10", end:"12:50", subject:"계절", room:"2-4반" },
+    { period:"학교", start:"13:00", end:"14:00", subject:"컴퓨터", room:"반" },
+    { period:"학원", start:"14:00", end:"15:00", subject:"셀파", room:"셀파" },
+    { period:"학원", start:"15:00", end:"16:00", subject:"책나무", room:"책나무" },
   ],
 ];
 
@@ -545,19 +545,19 @@ function renderPeriods() {
 
   periods.forEach((p, idx) => {
     // Lunch divider after 4th period
-    if (idx === 4) {
+    if (idx === 3) {
       const div = document.createElement("div");
       div.className = "divider";
       div.innerHTML = `
         <div class="divider-line"></div>
-        <span class="divider-label">🍱 점심시간 12:10 ~ 13:10</span>
+        <span class="divider-label">🍱 점심시간 11:20 ~ 12:10</span>
         <div class="divider-line"></div>
       `;
       list.appendChild(div);
     }
-    if (idx === 6) {
+    if (p.period === "학원" && !periods.slice(0, idx).some(x => x.period === "학원")) {
       const div = document.createElement("div");
-      div.className = "divider";
+      div.className = "end-divider";
       div.innerHTML = `
         <div class="end-divider-line"></div>
         <span class="end-label">하교 🎒</span>
