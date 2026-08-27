@@ -555,6 +555,7 @@ function renderPeriods() {
       `;
       list.appendChild(div);
     }
+    
     if (p.period === "학원" && !periods.slice(0, idx).some(x => x.period === "학원")) {
       const div = document.createElement("div");
       div.className = "end-divider";
