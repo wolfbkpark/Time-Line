@@ -503,6 +503,9 @@ let selectedDay = (() => {
       return saved.day;
     }
   } catch (_) { /* Storage may be disabled in a WebViewer. */ }
+  // Keep the chosen weekday in the URL, including in WebViewers without storage.
+  const value = new URL(location.href).searchParams.get('_day');
+  if (value !== null && /^[0-4]$/.test(value)) return Number(value);
   const d = new Date().getDay();
   return (d >= 1 && d <= 5) ? d - 1 : 0;
 })();
@@ -527,6 +530,12 @@ DAYS.forEach((d, i) => {
     selectedDay = i;
     updateDayButtons();
     renderPeriods();
+    updateClock();
+    if (navigator.onLine === false) return;
+    const freshUrl = new URL(location.href);
+    freshUrl.searchParams.set('_day', String(i));
+    freshUrl.searchParams.set('_refresh', Date.now().toString());
+    location.replace(freshUrl.href);
   });
 
   daySelector.appendChild(btn);
