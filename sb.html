@@ -493,6 +493,16 @@ function getNextPeriod(periods, now) {
 
 // State
 let selectedDay = (() => {
+  // Restore the selected weekday only after our own refresh, on the same date.
+  try {
+    const key = 'timetable-refresh:' + location.pathname;
+    const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+    sessionStorage.removeItem(key);
+    if (saved && saved.date === new Date().toDateString() &&
+        Number.isInteger(saved.day) && saved.day >= 0 && saved.day < DAYS.length) {
+      return saved.day;
+    }
+  } catch (_) { /* Storage may be disabled in a WebViewer. */ }
   const d = new Date().getDay();
   return (d >= 1 && d <= 5) ? d - 1 : 0;
 })();
@@ -720,6 +730,52 @@ function tick() {
   }
   requestAnimationFrame(tick);
 }
+
+// Refresh on a tap/click, return from background, or restored browser history.
+// A click also handles mobile taps without reloading while the user scrolls.
+let refreshInProgress = false;
+function refreshLatestPage() {
+  if (refreshInProgress) return;
+  updateClock();
+  updateDayButtons();
+  renderPeriods();
+  // Keep the existing timetable available when the device reports it is offline.
+  if (navigator.onLine === false) return;
+  refreshInProgress = true;
+  try {
+    sessionStorage.setItem('timetable-refresh:' + location.pathname, JSON.stringify({
+      day: selectedDay,
+      date: new Date().toDateString()
+    }));
+  } catch (_) { /* Refresh still works without storage. */ }
+  if (location.protocol === 'https:' || location.protocol === 'http:') {
+    const freshUrl = new URL(location.href);
+    freshUrl.searchParams.set('_refresh', Date.now().toString());
+    // Replace avoids filling the Back history with each refresh.
+    location.replace(freshUrl.href);
+  } else {
+    // Packaged/local HTML can only reload its installed copy.
+    location.reload();
+  }
+}
+
+document.addEventListener('click', (event) => {
+  if (event.defaultPrevented) return;
+  // Preserve future links and editable controls; weekday buttons still refresh.
+  if (event.target instanceof Element &&
+      event.target.closest('a, input, textarea, select, [contenteditable], button:not(.day-btn)')) return;
+  refreshLatestPage();
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') refreshLatestPage();
+});
+window.addEventListener('pageshow', (event) => {
+  refreshInProgress = false;
+  if (event.persisted) refreshLatestPage();
+});
+window.addEventListener('online', () => {
+  if (document.visibilityState === 'visible') refreshLatestPage();
+});
 
 // Init
 updateDayButtons();
